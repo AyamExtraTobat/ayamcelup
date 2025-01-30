@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Restoran</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="flex flex-col md:flex-row h-screen">
+        <!-- Navbar untuk Mobile -->
+        <header class="bg-red-700 text-white flex justify-between items-center px-5 py-3 md:hidden">
+            <h1 class="text-lg font-bold">Dashboard Restoran</h1>
+            <button id="menuButton" class="text-white focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button>
+        </header>
+        
+        <!-- Sidebar -->
+        <aside id="sidebar" class="text-white md:w-1/4 md:block hidden md:flex flex-col h-full overflow-y-auto"
+        style="background: linear-gradient(to bottom, #D82031, #871210);">
+            <div class="p-5 text-center font-bold text-lg">
+                MENU
+            </div>
+            <nav>
+                <ul>
+                    <li>
+                        <button onclick="showPage('chartPage')" class="w-full text-left px-5 py-3 hover:bg-red-700 focus:outline-none">
+                            TRAFFIC
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="showPage('inputPesanan')" class="w-full text-left px-5 py-3 hover:bg-red-700 focus:outline-none">
+                            ORDER
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="showPage('inputPengeluaran')" class="w-full text-left px-5 py-3 hover:bg-red-700 focus:outline-none">
+                            EXPENDITURE
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="showPage('dataPenjualan')" class="w-full text-left px-5 py-3 hover:bg-red-700 focus:outline-none">
+                            SALES DATA
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="showPage('pendapatan')" class="w-full text-left px-5 py-3 hover:bg-red-700 focus:outline-none">
+                            INCOME
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+        
+
+        <!-- Main Content -->
+        <main class="flex-1 bg-white p-5 md:flex flex-col h-full overflow-y-auto" >
+            <!-- Input Pesanan -->
+            <div id="inputPesanan" class="page hidden">
+                <h1 class="text-2xl font-bold mb-5 text-center">ORDER</h1>
+                <form action="https://sheetdb.io/api/v1/hwq4sltaz3xba" method="post" id="sheetdb-form" class="bg-white p-5 rounded shadow-md pb-24">
+                    <div class="mb-4">
+                        <label for="tanggal" class="block text-sm font-medium text-gray-700">Tanggal:</label>
+                        <input type="date" id="tanggal" name="data[Tanggal]" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="nama" class="block text-sm font-medium text-gray-700">Nama:</label>
+                        <input type="text" id="nama" name="data[Nama]" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Menu:</label>
+                        <div id="menu-container" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 overflow-y-scroll h-64 border rounded-md p-3">
+                            <!-- Contoh menu -->
+                            <div class="menu-item border rounded-md p-2 cursor-pointer" data-menu="Paket Sayap Saos Celup" data-harga="18000">
+                                <img src="assets/11.png" alt="Paket Sayap Saos Celup" class="w-full h-40 object-cover rounded-md">
+                                <p class="text-center mt-2 font-medium">Paket Sayap Saos Celup</p>
+                                <p class="text-center text-gray-600">Rp 18,000</p>
+                            </div>
+                            <div class="menu-item border rounded-md p-2 cursor-pointer" data-menu="Paket Paha Atas Saos Celup" data-harga="21000">
+                                <img src="assets/11.png" alt="Paket Paha Atas Saos Celup" class="w-full h-40 object-cover rounded-md">
+                                <p class="text-center mt-2 font-medium">Paket Paha Atas Saos Celup</p>
+                                <p class="text-center text-gray-600">Rp 21,000</p>
+                            </div>
+                            <div class="menu-item border rounded-md p-2 cursor-pointer" data-menu="Paket Paha Bawah Saos Celup" data-harga="19000">
+                                <img src="assets/11.png" alt="Paket Paha Bawah Saos Celup" class="w-full h-40 object-cover rounded-md">
+                                <p class="text-center mt-2 font-medium">Paket Paha Bawah Saos Celup</p>
+                                <p class="text-center text-gray-600">Rp 19,000</p>
+                            </div>
+                            <div class="menu-item border rounded-md p-2 cursor-pointer" data-menu="Paket Dada Saos Celup" data-harga="21000">
+                                <img src="assets/11.png" alt="Paket Dada Saos Celup" class="w-full h-40 object-cover rounded-md">
+                                <p class="text-center mt-2 font-medium">Paket Dada Saos Celup</p>
+                                <p class="text-center text-gray-600">Rp 21,000</p>
+                            </div>
+                            <div class="menu-item border rounded-md p-2 cursor-pointer" data-menu="Paket Sayap Geprek" data-harga="16000">
+                                <img src="assets/13.png" alt="Paket Sayap Geprek" class="w-full h-40 object-cover rounded-md">
+                                <p class="text-center mt-2 font-medium">Paket Sayap Geprek</p>
+                                <p class="text-center text-gray-600">Rp 16,000</p>
+                            </div>
+                            <div class="menu-item border rounded-md p-2 cursor-pointer" data-menu="Paket Paha Atas Geprek" data-harga="20000">
+                                <img src="assets/13.png" alt="Paket Paha Atas Geprek" class="w-full h-40 object-cover rounded-md">
+                                <p class="text-center mt-2 font-medium">Paket Paha Atas Geprek</p>
+                                <p class="text-center text-gray-600">Rp 20,000</p>
+                            </div>
+                            <div class="menu-item border rounded-md p-2 cursor-pointer" data-menu="Paket Paha Bawah Geprek" data-harga="17000">
+                                <img src="assets/13.png" alt="Paket Paha Bawah Geprek" class="w-full h-40 object-cover rounded-md">
+                                <p class="text-center mt-2 font-medium">Paket Paha Bawah Geprek</p>
+                                <p class="text-center text-gray-600">Rp 17,000</p>
+                            </div>
+                            <div class="menu-item border rounded-md p-2 cursor-pointer" data-menu="Paket Dada Geprek" data-harga="28000">
+                                <img src="assets/13.png" alt="Paket Dada Geprek" class="w-full h-40 object-cover rounded-md">
+                                <p class="text-center mt-2 font-medium">Paket Dada Geprek</p>
+                                <p class="text-center text-gray-600">Rp 20,000</p>
+                            </div>
+                            <div class="menu-item border rounded-md p-2 cursor-pointer" data-menu="Paket Sayap Original" data-harga="14000">
+                                <img src="assets/12.png" alt="Paket Sayap Original" class="w-full h-40 object-cover rounded-md">
+                                <p class="text-center mt-2 font-medium">Paket Sayap Original</p>
+                                <p class="text-center text-gray-600">Rp 14,000</p>
+                            </div>
+                            <div class="menu-item border rounded-md p-2 cursor-pointer" data-menu="Paket Paha Atas Original" data-harga="18000">
+                                <img src="assets/12.png" alt="Paket Paha Atas Original" class="w-full h-40 object-cover rounded-md">
+                                <p class="text-center mt-2 font-medium">Paket Paha Atas Original</p>
+                                <p class="text-center text-gray-600">Rp 18,000</p>
+                            </div>
+                            <div class="menu-item border rounded-md p-2 cursor-pointer" data-menu="Paket Paha Bawah Original" data-harga="16000">
+                                <img src="assets/12.png" alt="Paket Paha Bawah Original" class="w-full h-40 object-cover rounded-md">
+                                <p class="text-center mt-2 font-medium">Paket Paha Bawah Original</p>
+                                <p class="text-center text-gray-600">Rp 16,000</p>
+                            </div>
+                            <div class="menu-item border rounded-md p-2 cursor-pointer" data-menu="Paket Dada Original" data-harga="18000">
+                                <img src="assets/12.png" alt="Paket Dada Original" class="w-full h-40 object-cover rounded-md">
+                                <p class="text-center mt-2 font-medium">Paket Dada Original</p>
+                                <p class="text-center text-gray-600">Rp 18,000</p>
+                            </div>
+                            <div class="menu-item border rounded-md p-2 cursor-pointer" data-menu="Sayap Reguler" data-harga="9000">
+                                <img src="assets/1.png" alt="Sayap Reguler" class="w-full h-40 object-cover rounded-md">
+                                <p class="text-center mt-2 font-medium">Sayap Reguler</p>
+                                <p class="text-center text-gray-600">Rp 9,000</p>
+                            </div>
+                            <div class="menu-item border rounded-md p-2 cursor-pointer" data-menu="Paha Atas Reguler" data-harga="13000">
+                                <img src="assets/1.png" alt="Paha Atas Reguler" class="w-full h-40 object-cover rounded-md">
+                                <p class="text-center mt-2 font-medium">Paha Atas Reguler</p>
+                                <p class="text-center text-gray-600">Rp 13,000</p>
+                            </div>
+                            <div class="menu-item border rounded-md p-2 cursor-pointer" data-menu="Paha Bawah Reguler" data-harga="10000">
+                                <img src="assets/1.png" alt="Paha Bawah Reguler" class="w-full h-40 object-cover rounded-md">
+                                <p class="text-center mt-2 font-medium">Paha Bawah Reguler</p>
+                                <p class="text-center text-gray-600">Rp 10,000</p>
+                            </div>
+                            <div class="menu-item border rounded-md p-2 cursor-pointer" data-menu="Dada Reguler" data-harga="13000">
+                                <img src="assets/1.png" alt="Dada Reguler" class="w-full h-40 object-cover rounded-md">
+                                <p class="text-center mt-2 font-medium">Dada Reguler</p>
+                                <p class="text-center text-gray-600">Rp 13,000</p>
+                            </div>
+                            <div class="menu-item border rounded-md p-2 cursor-pointer" data-menu="Sayap Geprek" data-harga="12000">
+                                <img src="assets/2.png" alt="Sayap Geprek" class="w-full h-40 object-cover rounded-md">
+                                <p class="text-center mt-2 font-medium">Sayap Geprek</p>
+                                <p class="text-center text-gray-600">Rp 12,000</p>
+                            </div>
+                            <div class="menu-item border rounded-md p-2 cursor-pointer" data-menu="Paha Atas Geprek" data-harga="16000">
+                                <img src="assets/2.png" alt="Paha Atas Geprek" class="w-full h-40 object-cover rounded-md">
+                                <p class="text-center mt-2 font-medium">Paha Atas Geprek</p>
+                                <p class="text-center text-gray-600">Rp 16,000</p>
+                            </div>
+                            <div class="menu-item border rounded-md p-2 cursor-pointer" data-menu="Paha Bawah Geprek" data-harga="13000">
+                                <img src="assets/2.png" alt="Paha Bawah Geprek" class="w-full h-40 object-cover rounded-md">
+                                <p class="text-center mt-2 font-medium">Paha Bawah Geprek</p>
+                                <p class="text-center text-gray-600">Rp 13,000</p>
+                            </div>
+                            <div class="menu-item border rounded-md p-2 cursor-pointer" data-menu="Dada Geprek" data-harga="16000">
+                                <img src="assets/2.png" alt="Dada Geprek" class="w-full h-40 object-cover rounded-md">
+                                <p class="text-center mt-2 font-medium">Dada Geprek</p>
+                                <p class="text-center text-gray-600">Rp 16,000</p>
+                            </div>
+                            <div class="menu-item border rounded-md p-2 cursor-pointer" data-menu="Sayap Barbeque" data-harga="14000">
+                                <img src="assets/3.png" alt="Sayap Barbeque" class="w-full h-40 object-cover rounded-md">
+                                <p class="text-center mt-2 font-medium">Sayap Barbeque</p>
+                                <p class="text-center text-gray-600">Rp 14,000</p>
+                            </div>
+                            <div class="menu-item border rounded-md p-2 cursor-pointer" data-menu="Paha Atas Barbeque" data-harga="18000">
+                                <img src="assets/3.png" alt="Paha Atas Barbeque" class="w-full h-40 object-cover rounded-md">
+                                <p class="text-center mt-2 font-medium">Paha Atas Barbeque</p>
+                                <p class="text-center text-gray-600">Rp 18,000</p>
+                            </div>
+                            <div class="menu-item border rounded-md p-2 cursor-pointer" data-menu="Paha Bawah Barbeque" data-harga="15000">
+                                <img src="assets/3.png" alt="Paha Bawah Barbeque" class="w-full h-40 object-cover rounded-md">
+                                <p class="text-center mt-2 font-medium">Paha Bawah Barbeque</p>
+                                <p class="text-center text-gray-600">Rp 15,000</p>
+                            </div>
+                            <div class="menu-item border rounded-md p-2 cursor-pointer" data-menu="Dada Barbeque" data-harga="18000">
+                                <img src="assets/3.png" alt="Dada Barbeque" class="w-full h-40 object-cover rounded-md">
+                                <p class="text-center mt-2 font-medium">Dada Barbeque</p>
+                                <p class="text-center text-gray-600">Rp 18,000</p>
+                            </div>
+                            <div class="menu-item border rounded-md p-2 cursor-pointer" data-menu="Sayap Blackpepper" data-harga="14000">
+                                <img src="assets/4.png" alt="Sayap Blackpepper" class="w-full h-40 object-cover rounded-md">
+                                <p class="text-center mt-2 font-medium">Sayap Blackpepper</p>
+                                <p class="text-center text-gray-600">Rp 14,000</p>
+                            </div>
+                            <div class="menu-item border rounded-md p-2 cursor-pointer" data-menu="Paha Atas Blackpepper" data-harga="18000">
+                                <img src="assets/4.png" alt="Paha Atas Blackpepper" class="w-full h-40 object-cover rounded-md">
+                                <p class="text-center mt-2 font-medium">Paha Atas Blackpepper</p>
+                                <p class="text-center text-gray-600">Rp 18,000</p>
+                            </div>
+                            <div class="menu-item border rounded-md p-2 cursor-pointer" data-menu="Paha Bawah Blackpepper" data-harga="15000">
+                                <img src="assets/4.png" alt="Paha Bawah Blackpepper" class="w-full h-40 object-cover rounded-md">
+                                <p class="text-center mt-2 font-medium">Paha Bawah Blackpepper</p>
+                                <p class="text-center text-gray-600">Rp 15,000</p>
+                            </div>
+                            <div class="menu-item border rounded-md p-2 cursor-pointer" data-menu="Dada Blackpepper" data-harga="18000">
+                                <img src="assets/4.png" alt="Dada Blackpepper" class="w-full h-40 object-cover rounded-md">
+                                <p class="text-center mt-2 font-medium">Dada Blackpepper</p>
+                                <p class="text-center text-gray-600">Rp 18,000</p>
+                            </div>
+                            <div class="menu-item border rounded-md p-2 cursor-pointer" data-menu="Sayap Cheese" data-harga="14000">
+                                <img src="assets/5.png" alt="Sayap Cheese" class="w-full h-40 object-cover rounded-md">
+                                <p class="text-center mt-2 font-medium">Sayap Cheese</p>
+                                <p class="text-center text-gray-600">Rp 14,000</p>
+                            </div>
+                            <div class="menu-item border rounded-md p-2 cursor-pointer" data-menu="Paha Atas Cheese" data-harga="18000">
+                                <img src="assets/5.png" alt="Paha Atas Cheese" class="w-full h-40 object-cover rounded-md">
+                                <p class="text-center mt-2 font-medium">Paha Atas Cheese</p>
+                                <p class="text-center text-gray-600">Rp 18,000</p>
+                            </div>
+                            <div class="menu-item border rounded-md p-2 cursor-pointer" data-menu="Paha Bawah Cheese" data-harga="15000">
+                                <img src="assets/5.png" alt="Paha Bawah Cheese" class="w-full h-40 object-cover rounded-md">
+                                <p class="text-center mt-2 font-medium">Paha Bawah Cheese</p>
+                                <p class="text-center text-gray-600">Rp 15,000</p>
+                            </div>
+                            <div class="menu-item border rounded-md p-2 cursor-pointer" data-menu="Dada Cheese" data-harga="18000">
+                                <img src="assets/5.png" alt="Dada Cheese" class="w-full h-40 object-cover rounded-md">
+                                <p class="text-center mt-2 font-medium">Dada Cheese</p>
+                                <p class="text-center text-gray-600">Rp 18,000</p>
+                            </div>
+                            <div class="menu-item border rounded-md p-2 cursor-pointer" data-menu="Nasi Putih" data-harga="4000">
+                                <img src="assets/17.png" alt="Nasi Putih" class="w-full h-40 object-cover rounded-md">
+                                <p class="text-center mt-2 font-medium">Nasi Putih</p>
+                                <p class="text-center text-gray-600">Rp 4,000</p>
+                            </div>
+                            <div class="menu-item border rounded-md p-2 cursor-pointer" data-menu="Extra Saos" data-harga="5000">
+                                <img src="assets/16.png" alt="Extra Saos" class="w-full h-40 object-cover rounded-md">
+                                <p class="text-center mt-2 font-medium">Extra Saos</p>
+                                <p class="text-center text-gray-600">Rp 5,000</p>
+                            </div>
+                            <div class="menu-item border rounded-md p-2 cursor-pointer" data-menu="Es Teh" data-harga="4000">
+                                <img src="assets/7.png" alt="Es Teh" class="w-full h-40 object-cover rounded-md">
+                                <p class="text-center mt-2 font-medium">Es Teh</p>
+                                <p class="text-center text-gray-600">Rp 4,000</p>
+                            </div>
+                            <div class="menu-item border rounded-md p-2 cursor-pointer" data-menu="Lemon Tea" data-harga="6000">
+                                <img src="assets/8.png" alt="Lemon Tea" class="w-full h-40 object-cover rounded-md">
+                                <p class="text-center mt-2 font-medium">Lemon Tea</p>
+                                <p class="text-center text-gray-600">Rp 6,000</p>
+                            </div>
+                            <div class="menu-item border rounded-md p-2 cursor-pointer" data-menu="Coklat" data-harga="10000">
+                                <img src="assets/9.png" alt="Coklat" class="w-full h-40 object-cover rounded-md">
+                                <p class="text-center mt-2 font-medium">Coklat</p>
+                                <p class="text-center text-gray-600">Rp 10,000</p>
+                            </div>
+                            <div class="menu-item border rounded-md p-2 cursor-pointer" data-menu="Air Mineral" data-harga="5000">
+                                <img src="assets/10.png" alt="Air Mineral" class="w-full h-40 object-cover rounded-md">
+                                <p class="text-center mt-2 font-medium">Air Mineral</p>
+                                <p class="text-center text-gray-600">Rp 5,000</p>
+                            </div>
+                            <div class="menu-item border rounded-md p-2 cursor-pointer" data-menu="French Fries" data-harga="9000">
+                                <img src="assets/18.png" alt="French Fries" class="w-full h-40 object-cover rounded-md">
+                                <p class="text-center mt-2 font-medium">French Fries</p>
+                                <p class="text-center text-gray-600">Rp 9,000</p>
+                            </div>
+                            <div class="menu-item border rounded-md p-2 cursor-pointer" data-menu="Cireng Ayam" data-harga="10000">
+                                <img src="assets/19.png" alt="Cireng Ayam" class="w-full h-40 object-cover rounded-md">
+                                <p class="text-center mt-2 font-medium">Cireng Ayam</p>
+                                <p class="text-center text-gray-600">Rp 10,000</p>
+                            </div>
+                            <div class="menu-item border rounded-md p-2 cursor-pointer" data-menu="Nugget" data-harga="10000">
+                                <img src="assets/6.png" alt="Nugget" class="w-full h-40 object-cover rounded-md">
+                                <p class="text-center mt-2 font-medium">Nugget</p>
+                                <p class="text-center text-gray-600">Rp 10,000</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-4 overflow-x-auto">
+                        <h2 class="text-lg font-bold mb-2">Rincian Pesanan</h2>
+                        <table class="table-auto w-full bg-white rounded shadow-md">
+                            <thead class="bg-gray-100">
+                                <tr>
+                                    <th class="px-4 py-2 text-sm">Menu</th>
+                                    <th class="px-4 py-2 text-sm">Harga</th>
+                                    <th class="px-4 py-2 text-sm">Jumlah</th>
+                                    <th class="px-4 py-2 text-sm">Subtotal</th>
+                                    <th class="px-4 py-2 text-sm">Hapus</th>
+                                </tr>
+                            </thead>
+                            <tbody id="order-details" class="text-center text-sm"></tbody>
+                        </table>
+                    </div>
+                    <div class="mb-4">
+                        <label for="total" class="block text-sm font-medium text-gray-700">Total:</label>
+                        <input type="text" id="total" name="data[Total]" readonly class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                    </div>
+                    <button type="submit" class="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700">Input</button>
+                </form>
+            </div>
+                                             
+            
+            
+            
+            <!-- Input Pengeluaran -->
+            <div id="inputPengeluaran" class="page hidden">
+                <h1 class="text-2xl font-bold mb-5 text-center">EXPENDITURE</h1>
+                <form action="https://sheetdb.io/api/v1/mo5j0b46ica3q" method="post" id="pengeluaran-form" class="bg-white p-5 rounded shadow-md">
+                    <div class="mb-4">
+                        <label for="tanggal" class="block text-sm font-medium text-gray-700">Tanggal:</label>
+                        <input type="date" id="tanggal" name="data[Tanggal]" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="jenis" class="block text-sm font-medium text-gray-700">Jenis Pengeluaran:</label>
+                        <select id="jenis" name="data[Jenis]" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
+                            <option value="Bahan Baku">Bahan Baku</option>
+                            <option value="Gaji Karyawan">Gaji Karyawan</option>
+                            <option value="Lain-lain">Lain-lain</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="keterangan" class="block text-sm font-medium text-gray-700">Keterangan:</label>
+                        <input type="text" id="keterangan" name="data[Keterangan]" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="nominal" class="block text-sm font-medium text-gray-700">Nominal:</label>
+                        <input type="number" id="nominal" name="data[Nominal]" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
+                    </div>
+                    <button type="submit" class="w-full bg-green-600 text-white py-2 rounded-md hover:bg-indigo-700">Input Pengeluaran</button>
+                </form>
+            </div>
+            <!-- Data Penjualan -->
+            <div id="dataPenjualan" class="page hidden">
+                <h1 class="text-2xl font-bold mb-5 text-center">SALES DATA</h1>
+
+                <div class="overflow-x-auto">
+                    <div class="flex justify-end space-x-2 mb-4">
+                        <label for="startDate">Dari:</label>
+                        <input type="date" id="startDate" class="border rounded px-2 py-1">
+                        <label for="endDate">Sampai:</label>
+                        <input type="date" id="endDate" class="border rounded px-2 py-1">
+                    </div>
+                    <table class="table-auto w-full bg-white rounded shadow-md">
+                        <thead class="bg-blue-600 text-white">
+                            <tr>
+                                <th class="px-4 py-2 text-sm">Tanggal</th>
+                                <th class="px-4 py-2 text-sm">Menu</th>
+                                <th class="px-4 py-2 text-sm">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="data-table" class="text-center text-sm"></tbody>                       
+                    </table>
+                </div>
+                <div id="pagination" class="flex justify-between items-center mt-4">
+                    <button id="prevPage" class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700" disabled>
+                        Sebelumnya
+                    </button>
+                    <span id="pageNumber" class="text-sm text-gray-700">Halaman 1</span>
+                    <button id="nextPage" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700" disabled>
+                        Selanjutnya
+                    </button>
+                </div>
+            </div>
+
+<!-- Pendapatan -->
+<div id="pendapatan" class="page">
+    <h1 class="text-2xl font-bold mb-5 text-center">INCOME</h1>
+
+    <!-- Pendapatan Harian -->
+    <div class="bg-white p-5 rounded shadow-md mb-6">
+        <h2 class="text-lg font-bold mb-4">Pendapatan Harian</h2>
+        <div class="flex justify-between items-center">
+            <input type="date" id="tanggalHarian" class="border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
+            <button onclick="hitungPendapatanHarian()" class="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700">Hitung</button>
+        </div>
+        <div class="mt-4">
+            <h3 class="text-md font-semibold">Total Pendapatan Harian:</h3>
+            <p id="pendapatanHarian" class="text-lg font-bold text-green-600">Rp 0</p>
+        </div>
+    </div>
+
+    <!-- Pendapatan Bulanan -->
+    <div class="bg-white p-5 rounded shadow-md">
+        <h2 class="text-lg font-bold mb-4">Pendapatan Bulanan</h2>
+        <div class="flex justify-between items-center">
+            <input type="month" id="bulanPendapatan" class="border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
+            <button onclick="hitungPendapatanBulanan()" class="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700">Hitung</button>
+        </div>
+        <div class="mt-4">
+            <h3 class="text-md font-semibold">Total Pendapatan Bulanan:</h3>
+            <p id="pendapatanBulanan" class="text-lg font-bold text-green-600">Rp 0</p>
+        </div>
+    </div>
+</div>
+
+<!-- Chart -->
+<div id="chartPage" class="page hidden">
+    <h1 class="text-2xl font-bold mb-5 text-center">TRAFFIC</h1>
+    <div class="bg-white p-5 rounded shadow-md mb-6">
+        <label for="dataSelector" class="block text-sm font-medium text-gray-700 mb-2">Pilih Data:</label>
+        <select id="dataSelector" class="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 mb-4">
+            <option value="penjualan">Penjualan</option>
+            <option value="penghasilan">Penghasilan</option>
+        </select>
+        <input type="month" id="bulanChart" class="border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 mb-4">
+        <button onclick="loadChartData()" class="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 w-full">
+            Tampilkan Grafik
+        </button>
+    </div>
+    <div class="w-full max-w-4xl mx-auto" style="height: 400px;">
+        <canvas id="chartCanvas" class="w-full h-full"></canvas>
+    </div>
+</div>
+        </main>
+    </div>
+
+    <script src="dashboard.js">
+       
+    </script>
+   
+</body>
+</html>
+
+
